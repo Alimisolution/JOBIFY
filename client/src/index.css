@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.myColor {
+  background: #b9d4ed;
+}
+.txt {
+  color: #00b0ff;
+}
+.bgColor {
+  background-color: #00b0ff;
+}
+.borColor {
+  border: 1px solid #00b0ff;
+}
+
+.borTop {
+  border-top: 10px solid #00b0ff;
+}
+.borPen {
+  border-bottom: 7px solid rgb(245, 158, 11);
+}
+.borInter {
+  border-bottom: 7px solid rgb(100, 122, 203);
+}
+.borDec {
+  border-bottom: 7px solid rgb(214, 106, 106);
+}
+.pen {
+  color: rgb(245, 158, 11);
+}
+.bgPen {
+  background-color: rgb(245, 158, 11);
+}
+.inter {
+  color: rgb(100, 122, 203);
+}
+.bgInter {
+  background-color: rgb(100, 122, 203);
+}
+.dec {
+  color: rgb(214, 106, 106);
+}
+.bgDec {
+  background-color: rgb(214, 106, 106);
+}
+/* .active {
+  color: #00b0ff;
+} */
