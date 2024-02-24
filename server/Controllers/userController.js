@@ -100,8 +100,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 const uploadFile = asyncHandler(async (req, res) => {
   const profile = req.files.image;
-
-  const fileName = `${req.user._id}${path.extname(profile.name)}`;
+  const fileName = profile.name;
 
   profile.mv(`uploads/${fileName}`, (err) => {
     if (err) {

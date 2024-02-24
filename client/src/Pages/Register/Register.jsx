@@ -44,6 +44,7 @@ function Register() {
           lastName,
           email,
           password,
+          image,
         }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate("/dashboard");
@@ -130,7 +131,9 @@ function Register() {
             id="image"
             className="w-[100%] py-1 px-3 outline-none border borColor rounded-md"
           />
-          <p className="text-red-500 text-sm">Only image of 500kb</p>
+          <p className="text-red-500 text-xs">
+            Only image of 500kb, with extention of jpg,png and jpeg
+          </p>
         </div>
 
         <button
