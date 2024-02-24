@@ -26,7 +26,7 @@ const userSlice = apiSlice.injectEndpoints({
     uploadImage: builder.mutation({
       query: (data) => ({
         url: USER_API,
-        method: "POST",
+        method: "PATCH",
         body: data,
       }),
     }),

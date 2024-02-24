@@ -13,7 +13,7 @@ import {
 
 const router = express.Router();
 
-router.post("/", uploadFile);
+router.patch("/", protect, uploadFile);
 router.post("/auth", authUser);
 router.post("/logout", LogoutUser);
 router.post("/register", RegisterUser);

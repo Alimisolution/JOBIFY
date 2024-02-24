@@ -17,7 +17,6 @@ const authUser = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       image: user.image,
-      isAdmin: user.isAdmin,
     });
   } else {
     res.status(404);
@@ -26,7 +25,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 const RegisterUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password, image } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   sendmails(email);
   const user = await User.findOne({ email });
   if (user) {
@@ -37,7 +36,6 @@ const RegisterUser = asyncHandler(async (req, res) => {
     lastName,
     email,
     password,
-    image,
   });
   generateToken(res, regUser._id);
   res.status(201).json({
@@ -45,8 +43,7 @@ const RegisterUser = asyncHandler(async (req, res) => {
     firstName: regUser.firstName,
     lastName: regUser.lastName,
     email: regUser.email,
-    image: regUser.image,
-    isAdmin: regUser.isAdmin,
+    image: "img/default.jpg",
   });
 });
 
@@ -64,7 +61,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   if (user) {
     user.firstName = req.body.firstName || user.firstName;
     user.lastName = req.body.lastName || user.lastName;
-    user.image = req.body.image || user.lastName;
+    user.image = req.body.image || user.image;
     user.email = req.body.email || user.email;
 
     if (req.body.password) {
@@ -77,7 +74,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       lastName: updateuser.lastName,
       email: updateuser.email,
       image: updateuser.image,
-      isAdmin: updateuser.isAdmin,
     });
   } else {
     res.status(404);
@@ -94,7 +90,6 @@ const getUserProfile = asyncHandler(async (req, res) => {
       lastName: user.lastName,
       email: user.email,
       image: user.image,
-      isAdmin: user.isAdmin,
     });
   } else {
     res.status(404);
@@ -104,23 +99,16 @@ const getUserProfile = asyncHandler(async (req, res) => {
 
 const uploadFile = asyncHandler(async (req, res) => {
   const profile = req.files.image;
+
   const fileName = `${req.user._id}${path.extname(profile.name)}`;
-  const fileSize = profile.size / 1000;
-  const fileExt = profile.name.split(".")[1];
-  if (fileSize > 500) {
-    res.status(500);
-    throw new Error("file size must not be more than 500kb");
-  }
-  if (!["jpg", "png", "jpeg"].includes(fileExt)) {
-    res.status(500);
-    throw new Error("file extension must png, jpg or jpeg");
-  }
+
   profile.mv(`uploads/${fileName}`, (err) => {
     if (err) {
       res.status(500);
       throw new Error("Interner server error");
     }
   });
+  await User.findByIdAndUpdate(req.user._id, { profile: fileName });
   res.status(200).json({
     data: { file: `${req.protocol}://${req.get("host")}/${fileName}` },
   });

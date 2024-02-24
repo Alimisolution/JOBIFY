@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useUpdateuserProfileMutation } from "../../slices/userApiSlice";
+import {
+  useUpdateuserProfileMutation,
+  useUploadImageMutation,
+} from "../../slices/userApiSlice";
 import { setCredentials } from "../../slices/authSlice";
 import { toast } from "react-toastify";
 
@@ -21,9 +24,9 @@ function ProfileComponent() {
 
   const [updateProfile, isLoading] = useUpdateuserProfileMutation();
   const dispatch = useDispatch();
-  const [uploadProfile] = useUpdateuserProfileMutation();
+  const [uploadProfile] = useUploadImageMutation();
 
-  async function handleSubmitJob(e) {
+  async function handleSubmitProfile(e) {
     e.preventDefault();
     try {
       const res = await updateProfile({
@@ -37,22 +40,34 @@ function ProfileComponent() {
       toast.success("User profile updated");
     } catch (error) {
       toast.error(error?.data?.message || error.message);
+      console.log(error);
     }
   }
 
+  const MAX_FILE_SIZE = 1024 * 500;
+
   const uploadImage = async (e) => {
     const fileStr = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImage(reader.result);
-    };
-    reader.readAsDataURL(fileStr);
-    try {
-      if (image) {
-        await uploadProfile(image).unwrap();
+    const FILE_EXT = fileStr.name.split(".")[1];
+    console.log(fileStr);
+
+    if (fileStr && fileStr.size > MAX_FILE_SIZE) {
+      toast.error("file size must not be more than 500kb");
+    } else if (!["jpg", "png", "jpeg"].includes(FILE_EXT)) {
+      toast.error("file extension must be png, jpg or jpeg");
+    } else {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImage(reader.result);
+      };
+      reader.readAsDataURL(fileStr);
+      try {
+        if (image) {
+          await uploadProfile(image).unwrap();
+        }
+      } catch (error) {
+        toast.error(error?.data?.message || error.message);
       }
-    } catch (error) {
-      toast.error(error?.data?.message || error.message);
     }
   };
 
@@ -61,7 +76,7 @@ function ProfileComponent() {
       <h1 className="text-xl sm:text-3xl">Profile</h1>
       <form
         className="lg:grid grid-cols-3 gap-5 mt-10 items-center justify-center"
-        onSubmit={handleSubmitJob}
+        onSubmit={handleSubmitProfile}
       >
         <div className="space-y-3">
           <label className="text-sm mt-7 lg:mt-0 block" htmlFor=" first">
@@ -121,6 +136,7 @@ function ProfileComponent() {
             id="image"
             className="w-[100%] py-1 px-3 outline-none border borColor rounded-md"
           />
+          <p className="text-red-500 text-sm">Only image of 500mb</p>
         </div>
 
         <div className="pt-8">

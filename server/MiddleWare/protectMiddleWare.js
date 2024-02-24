@@ -9,7 +9,7 @@ const protect = asyncHandler(async (req, res, next) => {
     try {
       const decoded = await jwt.verify(token, process.env.JWT_SECRET);
       req.user = await User.findById(decoded.userId).select("-password");
-      return next();
+      next();
     } catch (error) {
       res.status(401);
       throw new Error("Not authorized token failed");
@@ -22,7 +22,7 @@ const protect = asyncHandler(async (req, res, next) => {
 
 const admin = asyncHandler(async (req, res, next) => {
   if (req.user && req.user.isAdmin) {
-    return next();
+    next();
   } else {
     res.status(401);
     throw new Error("Not authorized as admin");
