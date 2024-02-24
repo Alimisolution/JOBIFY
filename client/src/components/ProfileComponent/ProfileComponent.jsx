@@ -19,7 +19,6 @@ function ProfileComponent() {
     setFirstName(userInfo.firstName);
     setLastName(userInfo.lastName);
     setEmail(userInfo.email);
-    setImage(userInfo.image);
   }, [userInfo]);
 
   const [updateProfile, isLoading] = useUpdateuserProfileMutation();
@@ -49,7 +48,6 @@ function ProfileComponent() {
   const uploadImage = async (e) => {
     const fileStr = e.target.files[0];
     const FILE_EXT = fileStr.name.split(".")[1];
-    console.log(fileStr);
 
     if (fileStr && fileStr.size > MAX_FILE_SIZE) {
       toast.error("file size must not be more than 500kb");
@@ -136,7 +134,7 @@ function ProfileComponent() {
             id="image"
             className="w-[100%] py-1 px-3 outline-none border borColor rounded-md"
           />
-          <p className="text-red-500 text-sm">Only image of 500mb</p>
+          <p className="text-red-500 text-sm">Only image of 500kb</p>
         </div>
 
         <div className="pt-8">

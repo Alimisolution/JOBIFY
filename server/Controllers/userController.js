@@ -25,7 +25,7 @@ const authUser = asyncHandler(async (req, res) => {
 });
 
 const RegisterUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, image } = req.body;
   sendmails(email);
   const user = await User.findOne({ email });
   if (user) {
@@ -36,6 +36,7 @@ const RegisterUser = asyncHandler(async (req, res) => {
     lastName,
     email,
     password,
+    image,
   });
   generateToken(res, regUser._id);
   res.status(201).json({
@@ -43,7 +44,7 @@ const RegisterUser = asyncHandler(async (req, res) => {
     firstName: regUser.firstName,
     lastName: regUser.lastName,
     email: regUser.email,
-    image: "img/default.jpg",
+    image: regUser.image,
   });
 });
 
@@ -108,7 +109,7 @@ const uploadFile = asyncHandler(async (req, res) => {
       throw new Error("Interner server error");
     }
   });
-  await User.findByIdAndUpdate(req.user._id, { profile: fileName });
+
   res.status(200).json({
     data: { file: `${req.protocol}://${req.get("host")}/${fileName}` },
   });
