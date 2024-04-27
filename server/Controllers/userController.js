@@ -1,7 +1,6 @@
 import User from "../Models/userModel.js";
 import asyncHandler from "../MiddleWare/asyncHanler.js";
 import generateToken from "../utils/generateToken.js";
-import path from "path";
 import sendmails from "../sendMail.js";
 
 const authUser = asyncHandler(async (req, res) => {
@@ -20,7 +19,7 @@ const authUser = asyncHandler(async (req, res) => {
     });
   } else {
     res.status(404);
-    throw new Error("Invalid email or pasword");
+    throw new Error("Invalid email or password");
   }
 });
 

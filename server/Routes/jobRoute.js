@@ -7,6 +7,7 @@ import {
   deleteJbb,
   updateJbb,
 } from "../Controllers/jobController.js";
+
 import { protect } from "../MiddleWare/protectMiddleWare.js";
 router.route("/").get(protect, getAllJobs).post(protect, createJbb);
 router

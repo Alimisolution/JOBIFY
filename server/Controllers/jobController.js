@@ -33,7 +33,7 @@ const createJbb = asyncHandler(async (req, res) => {
 const deleteJbb = asyncHandler(async (req, res) => {
   const job = await Job.findByIdAndDelete(req.params.id);
   if (job) {
-    res.status(401).json("Job succefully deleted");
+    res.status(401).json("Job successfully deleted");
   } else {
     res.status(404);
     throw new Error("Resource not found");
